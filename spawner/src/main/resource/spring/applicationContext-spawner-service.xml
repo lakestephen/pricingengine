@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"       
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       					   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd" 
+	   default-autowire="byType">
+
+	<!-- Have own properties here -->
+
+	<bean id="hub.service.spawner.prototype" class="com.concurrentperformance.pebble.spawner.controller.DefaultSpawnerService" scope="prototype">
+	   	<property name="hubSpawner" ref="spawner.hub.descriptor" />
+    	<property name="containerSpawner" ref="spawner.container.descriptor" />
+	</bean>
+    
+  	<bean id="spawner.hub.descriptor" class="com.concurrentperformance.pebble.spawner.controller.impl.JvmSpawnerDescriptor" >
+    	<property name="canonicalClassName"  value="${spawner.hub.canonicalclassname}"/>
+    	<property name="classPath"  value="${spawner.hub.classpath}"/>
+    	<property name="directory"  value="${spawner.hub.directory}"/>
+    </bean>
+    
+  	<bean id="spawner.container.descriptor" class="com.concurrentperformance.pebble.spawner.controller.impl.JvmSpawnerDescriptor" >
+    	<property name="canonicalClassName"  value="${spawner.container.canonicalclassname}"/>
+    	<property name="classPath"  value="${spawner.container.classpath}"/>
+    	<property name="directory"  value="${spawner.container.directory}"/>
+    </bean>
+        
+</beans>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="com.concurrentperformance.pebble.container.functional.graph.beans.GraphItem" table="GRAPH_ITEM">
+
+        <id name="id" type="long" column="ID">
+            <generator class="seqhilo">
+                <param name="sequence">GRAPH_SEQ</param>
+                <param name="max_lo">100</param>
+            </generator>
+        </id>
+
+        <natural-id>
+            <property name="path" column="PATH" unique="true"/>
+        </natural-id>
+
+        <property name="mountId" column="MOUNT_ID" not-null="true"/>
+        <property name="calculation" column="CALCULATION"/>
+        <list name="inputEventIds" lazy="false" cascade="all-delete-orphan" table="GRAPH_ITEM_INPUT">
+            <key column="GRAPH_ITEM_ID" foreign-key="FKParentGraphItem"/>
+            <index column="INDEX"/>
+            <element type="string" column="INPUT_EVENT_ID" not-null="true"/>
+        </list>
+        <property name="outputEventId" column="OUTPUT"/>
+        <property name="persisted" column="PERSISTED"/>
+    </class>
+
+    <class name="com.concurrentperformance.pebble.container.functional.graph.beans.GraphItemValueInt"
+           table="GRAPH_INT_VALUE">
+
+        <id name="graphItemId" column="graphItemId"/>
+
+        <property name="value" column="VALUE"/>
+    </class>
+
+
+</hibernate-mapping>

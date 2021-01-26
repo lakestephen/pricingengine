@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"> 
+
+	<!-- DataSource Property -->
+	<bean id="data.hibernate.dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url" value="${data.url}" />
+		<property name="username" value="${data.username}" />
+		<property name="password" value="${data.password}" />
+	</bean>
+
+
+	<!-- Database Property -->
+	<bean id="data.hibernate.properties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="properties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+<!--  				<prop key="hibernate.hbm2ddl.auto">create-drop</prop> -->
+				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+				<prop key="hibernate.c3p0.minPoolSize">5</prop>
+				<prop key="hibernate.c3p0.maxPoolSize">20</prop>
+				<prop key="hibernate.c3p0.timeout">600</prop>
+				<prop key="hibernate.c3p0.max_statement">50</prop>
+				<prop key="hibernate.c3p0.testConnectionOnCheckout">false</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Hibernate SessionFactory -->
+	<bean id="data.hibernate.sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="hibernateProperties" ref="data.hibernate.properties" />
+		<property name="dataSource" ref="data.hibernate.dataSource" />
+		<!-- OR mapping files. -->
+		<property name="mappingResources">
+			<list>
+				<value>hibernate/Topology.hbm.xml</value>
+			</list>
+		</property>
+    </bean> 
+ 	  
+  	<bean id="data.tx.manager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="data.hibernate.dataSource"/>
+ 	</bean>   
+
+	<tx:advice id="data.tx.advice" transaction-manager="data.tx.manager">
+		<tx:attributes>
+   	 		<!-- all methods starting with 'get' are read-only -->
+    		<tx:method name="get*" read-only="true"/>
+    
+    		<!-- other methods use the default transaction settings (see below) -->
+    		<tx:method name="*"/>
+  		</tx:attributes>
+  	</tx:advice>
+  	
+  	<aop:config>
+  		<aop:pointcut id="data.tx.topologyService" expression="execution(* com.concurrentperformance.pebble.controller.functional.topology.dao.impl.HibernateTopologyDao.*(..))"/>
+  		<aop:advisor advice-ref="data.tx.advice" pointcut-ref="data.tx.topologyService"/>
+  	</aop:config>
+  	
+</beans>

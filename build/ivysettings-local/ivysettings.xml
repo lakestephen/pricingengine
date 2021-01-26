@@ -1,0 +1,23 @@
+<ivysettings>
+    <properties environment="env"/>
+
+    <caches defaultCacheDir="${env.IVY_CACHE_HOME}/cache"/>
+
+    <settings defaultResolver="chained-resolver"/>
+
+    <resolvers>
+	    <chain name="chained-resolver">
+
+		<filesystem name="local-resolver" m2compatible="true" checksums="">
+		    <ivy pattern="${env.IVY_CACHE_HOME}/local/[organisation]/[module]/[revision]/ivy-[revision].xml"/>
+		    <artifact pattern="${env.IVY_CACHE_HOME}/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+		</filesystem>
+
+		<url name="test" m2compatible="true">
+			<ivy pattern="http://repo1.maven.org/maven2/[organisation]/[module]/[revision]/ivy-[revision].xml"/>
+			<artifact pattern="http://repo1.maven.org/maven2/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
+		</url>
+	    </chain>
+    </resolvers>
+
+</ivysettings>

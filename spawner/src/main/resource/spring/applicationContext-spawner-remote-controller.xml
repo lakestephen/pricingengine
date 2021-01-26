@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	default-autowire="byType"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+    
+    <!-- TODO review all the bean names in this file.  -->
+
+   	<bean id="remote.controller.listener" class="com.concurrentperformance.pebble.comms.rpc.server.socketlistener.RpcServerConnectionFactory"
+    		init-method="start"
+        p:weAreA="Spawner"
+        p:weAreListeningFor="Controllers"
+        p:port="${comms.spawner-controller.port}">
+    	<property name="duplexPrototypeServices">
+    		<set>
+    			<ref bean="container.service.spawner"/>
+    		</set>
+    	</property>
+  	</bean>
+    
+
+    <bean id="container.service.spawner" class="com.concurrentperformance.pebble.comms.rpc.server.service.RpcServerDuplexServiceDefinition"
+        p:serviceIncommingC2SAPI="com.concurrentperformance.pebble.spawnercontroller.api.SpawnerServiceC2SApi"
+        p:serviceOutgoingS2CAPI="com.concurrentperformance.pebble.spawnercontroller.api.SpawnerServiceS2CApi">
+        <lookup-method name="createC2SService" bean="hub.service.spawner.prototype"/> 
+   	</bean>
+  
+ 
+</beans>

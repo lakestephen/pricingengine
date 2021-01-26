@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="com.concurrentperformance.pebble.controller.functional.topology.beans.TopologyDescriptor" table="TOPOLOGY">
+    	
+    	<id name="id" type="long" column="ID">
+			<generator class="sequence">
+			    <param name="sequence">TOPOLOGY_SEQ</param>
+			</generator>    	
+		</id>
+    
+        <property name="name" column="NAME" unique="true"/>
+
+	    <joined-subclass name="com.concurrentperformance.pebble.controller.functional.topology.beans.MachineDescriptor" table="TOPOLOGY_MACHINE" >
+	
+		    <key column="TOPOLOGY_ID" foreign-key="FKTopology"/>
+	        
+	        <set name="hubDescriptors" lazy="false" cascade="all-delete-orphan" inverse="true">
+	        	<key column="PARENT_MACHINE_ID" foreign-key="FKParentMachine"/>
+	        	<one-to-many class="com.concurrentperformance.pebble.controller.functional.topology.beans.HubDescriptor"/>
+	        </set>
+	        
+		</joined-subclass>
+
+	    <joined-subclass name="com.concurrentperformance.pebble.controller.functional.topology.beans.HubDescriptor" table="TOPOLOGY_HUB">
+
+		    <key column="TOPOLOGY_ID" foreign-key="FKTopology"/>
+
+        	<property name="listenPort" column="LISTEN_PORT" not-null="true"/>
+
+			<many-to-one name="parentMachine" class="com.concurrentperformance.pebble.controller.functional.topology.beans.MachineDescriptor"
+					column="PARENT_MACHINE_ID" not-null="true" lazy="false"/>
+	        
+	        <set name="containerDescriptors" lazy="false" cascade="all-delete-orphan" inverse="true">
+	        	<key column="PARENT_HUB_ID" foreign-key="FKParentHub" />
+	        	<one-to-many class="com.concurrentperformance.pebble.controller.functional.topology.beans.ContainerDescriptor" />
+	        </set>
+	        
+		</joined-subclass>
+	
+	    <joined-subclass name="com.concurrentperformance.pebble.controller.functional.topology.beans.ContainerDescriptor" table="TOPOLOGY_CONTAINER">
+	
+		    <key column="TOPOLOGY_ID" foreign-key="FKTopology"/>
+	
+			<many-to-one name="parentHub" class="com.concurrentperformance.pebble.controller.functional.topology.beans.HubDescriptor"
+				column="PARENT_HUB_ID" not-null="true" lazy="false"/>
+
+	        <set name="hostedMounts" lazy="false" cascade="all" inverse="true">
+	        	<key column="HOST_CONTAINER_ID" foreign-key="FKParentContainer" />
+	        	<one-to-many class="com.concurrentperformance.pebble.controller.functional.topology.beans.MountDescriptor" />
+	        </set>
+
+		</joined-subclass>
+	
+	    <joined-subclass name="com.concurrentperformance.pebble.controller.functional.topology.beans.MountDescriptor" table="TOPOLOGY_MOUNT">
+	
+		    <key column="TOPOLOGY_ID" foreign-key="FKTopology"/>
+	
+			<many-to-one name="hostContainer" class="com.concurrentperformance.pebble.controller.functional.topology.beans.ContainerDescriptor"
+				column="HOST_CONTAINER_ID" not-null="false" lazy="false"/>
+
+		</joined-subclass>
+
+	</class>
+
+</hibernate-mapping>

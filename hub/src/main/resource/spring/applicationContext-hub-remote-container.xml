@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       default-autowire="byType"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    
+    <!-- TODO review all the bean names in this file.  -->
+      
+   	<bean id="remote.container.listener" class="com.concurrentperformance.pebble.comms.pipeline.server.socketlistener.PipelineServerConnectionFactory"
+        p:weAreA="${pebble.hub.name}"
+        p:weAreAId="${pebble.hub.id}"
+        p:weAreListeningFor="Containers"
+        p:port="${pebble.container.port}"
+        p:translator-ref="remote.translator"
+        p:reciever-ref="service.eventBuffer" />    
+
+    <bean id="remote.translator" class="com.concurrentperformance.pebble.msgcommon.event.EventTranslator"/>
+
+    <bean id="service.eventBuffer" class="com.concurrentperformance.pebble.hub.service.EventBufferService"/>
+
+
+</beans>

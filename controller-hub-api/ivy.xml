@@ -1,0 +1,19 @@
+<ivy-module version="2.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd"
+            xmlns:m="http://ant.apache.org/ivy/maven">
+
+    <info organisation="com.concurrentperformance.pebble" module="pebble-controller-hub-api"/>
+
+    <configurations defaultconf="lib" defaultconfmapping="lib->*;lib64->*;testlib->*;source->*">
+        <conf name="lib"/>
+        <conf name="lib64"/>
+        <conf name="testlib" visibility="private"/>
+        <conf name="source"/>
+    </configurations>
+
+    <dependencies>
+    
+    </dependencies>
+
+</ivy-module>

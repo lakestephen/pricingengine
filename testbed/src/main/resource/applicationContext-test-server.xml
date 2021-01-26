@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"       
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       					   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd" 
+       default-autowire="byType">     
+<!--
+
+    <bean id="testbed" class="com.concurrentperformance.pebble.testbed.TestServer"  init-method="start" />
+    
+ 	<bean name="remote.serversocket.listener" class="com.pebble.comms.rpc.server.RpcServerSocketListener"
+    		init-method="start">
+        <property name="servicePort" value="4000"/>
+		<property name="name" value="TestApp"/>
+        <property name="implementedServics"> 
+        	<set>
+        		<ref bean="remote.service.client.topology"/>
+        	</set>         	
+        </property>
+        <property name="clientProxys"> 
+        	<set>
+        		<ref bean="remote.service.server.controllerClientCallbackService"/>
+        	</set>         	
+        </property>
+        
+    </bean>
+    
+      &lt;!&ndash; Proxies for services on the other side of the socket &ndash;&gt;
+    <bean id="remote.service.server.controllerClientCallbackService" class="com.pebble.comms.rpc.server.RpcProxyDefinition">
+    	<property name="remoteServiceIdentifier" value="ControllerClientCallbackService" />
+        <property name="remoteServiceInterface" value="com.pebble.controllerclient.api.ControllerClientCallbackService"/>
+    </bean>
+    
+    &lt;!&ndash;  Services that can be called from the other side of the socket &ndash;&gt;
+   	<bean name="remote.service.client.topology" class="com.pebble.comms.rpc.common.RpcServiceExporter">
+        <property name="service" ref="service.topology" />  
+        <property name="serviceIdentifier" value="Topology" />
+        <property name="serviceInterface" value="com.pebble.controllerclient.api.TopologyService" />
+    </bean>
+
+ 	<bean id="service.topology" class="com.pebble.controllerclient.api.impl.BasicTopologyService" />
+-->
+</beans>

@@ -1,0 +1,183 @@
+<project name="build-application" default="build" basedir="../../../../">
+
+    <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+    <taskdef name="intellijDeps" classname="com.concurrentperformance.pebble.ant.IntellijDeps" />
+
+    <property name="build.dir" value=".build"/>
+    <property name="build.staging.dir" value="${build.dir}/modulestaging"/>
+    <property name="build.application.dir" value="${build.dir}/applications"/>
+    <property name="build.version" value="SNAPSHOT"/>
+
+    <target name="build" description="Main build">
+
+        <antcall target="clean-all"/>
+
+        <!-- Build all the individual modules to the staging area -->
+        <for list="util-common,comms,spawner-controller-api,spawner,msg-common,controller-spawned-api,controller-hub-api,controller-container-api,controller-client-api,controller,spawned-common,hub,container,client-api,client-ui"
+             param="name">
+            <sequential>
+                <antcall target="build-module">
+                    <param name="build.module.name" value="@{name}"/>
+                </antcall>
+            </sequential>
+        </for>
+
+        <!-- Assemble the Client project -->
+        <antcall target="build-application">
+            <param name="build.application.path" value="ClientUI"/>
+            <param name="build.application.module.name" value="client-ui"/>
+        </antcall>
+        <!-- Assemble the Client API project -->
+        <antcall target="build-application">
+            <param name="build.application.path" value="ClientAPI"/>
+            <param name="build.application.module.name" value="client-api"/>
+        </antcall>
+        <!-- Assemble the Controller project -->
+        <antcall target="build-application">
+            <param name="build.application.path" value="Controller"/>
+            <!-- TODO remove Spawner, Hub & Controller -->
+            <param name="build.application.module.name" value="controller"/>
+        </antcall>
+        <!-- Assemble the Spawner project -->
+        <antcall target="build-application">
+            <param name="build.application.path" value="Spawner"/>
+            <param name="build.application.module.name" value="spawner"/>
+        </antcall>
+        <!-- Assemble the Hub project -->
+        <antcall target="build-application">
+            <param name="build.application.path" value="Spawner/Hub"/>
+            <param name="build.application.module.name" value="hub"/>
+        </antcall>
+        <!-- Assemble the Hub project -->
+        <antcall target="build-application">
+            <param name="build.application.path" value="Spawner/Container"/>
+            <param name="build.application.module.name" value="container"/>
+        </antcall>
+
+        <!-- Tidy up -->
+        <!--<antcall target="clean-staging"/>-->
+    </target>
+
+    <target name="build-module">
+        <echo>Build Module '${build.module.name}'</echo>
+
+        <property name="build.module.dir" value="${build.module.name}/"/>
+
+        <property name="build.staging.module.dir" value="${build.staging.dir}/${build.module.name}"/>
+        <property name="build.staging.compile.dir" value="${build.staging.module.dir}/compile"/>
+        <property name="build.staging.out.dir" value="${build.staging.module.dir}/out"/>
+        <property name="build.staging.config.dir" value="${build.staging.module.dir}/config"/>
+        <property name="build.staging.lib-third-party.dir" value="${build.staging.module.dir}/lib-third-party"/>
+        <property name="build.staging.lib-internal" value="${build.staging.module.dir}/lib-internal"/>
+
+        <antcall target="build-module-init"/>
+        <antcall target="build-module-get-lib"/>
+        <antcall target="build-module-compile"/>
+        <antcall target="build-module-copy-resource"/>
+        <antcall target="build-module-jar"/>
+    </target>
+
+    <target name="build-module-init">
+        <echo>Initialising module '${build.module.name}'</echo>
+        <mkdir dir="${build.staging.compile.dir}"/>
+        <mkdir dir="${build.staging.out.dir}"/>
+        <mkdir dir="${build.staging.config.dir}"/>
+        <mkdir dir="${build.staging.lib-internal}"/>
+        <mkdir dir="${build.staging.lib-third-party.dir}"/>
+    </target>
+
+    <target name="build-module-get-lib">
+        <echo>Get libs for module '${build.module.name}'</echo>
+        <intellijDeps projectRootDir="."
+                      moduleName="${build.module.name}"
+                      moduleDependencyParam="build.module.dependency"
+                      jarDependencyParam="build.jar.dependency"/>
+        <for list="${build.module.dependency}" param="dependency.module">
+            <sequential>
+                <echo>Copy internal dependency '@{dependency.module}'</echo>
+                <copy todir="${build.staging.lib-internal}">
+                    <fileset dir="${build.staging.dir}/@{dependency.module}/out"/>
+                </copy>
+            </sequential>
+        </for>
+        <for list="${build.jar.dependency}" param="dependency.jar">
+            <sequential>
+                <echo>Copy jar dependency '@{dependency.jar}'</echo>
+                <copy file="@{dependency.jar}" todir="${build.staging.lib-third-party.dir}" />
+            </sequential>
+        </for>
+
+        <copy todir="${build.staging.lib-third-party.dir}">
+            <fileset dir="${build.module.dir}/lib" erroronmissingdir="false"/>
+            <fileset dir="${build.module.dir}/lib-unmanaged" erroronmissingdir="false"/>
+        </copy>
+    </target>
+
+    <target name="build-module-compile">
+        <echo>Compile module '${build.module.name}'</echo>
+        <javac srcdir="${build.module.dir}/src/main/java" destdir="${build.staging.compile.dir}" source="1.7" debug="on"
+               includeantruntime="false">
+            <include name="**/*.java"/>
+            <classpath>
+                <fileset dir="${build.staging.lib-internal}" includes="*.jar"/>
+                <fileset dir="${build.staging.lib-third-party.dir}" includes="*.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="build-module-copy-resource">
+        <echo>Copy resource for module '${build.module.name}'</echo>
+
+        <copy todir="${build.staging.compile.dir}">
+            <fileset dir="${build.module.dir}/src/main/resource" erroronmissingdir="false"/>
+        </copy>
+        <copy todir="${build.staging.config.dir}">
+            <fileset dir="${build.module.dir}/src/main/config" erroronmissingdir="false">
+                <exclude name="**/*_ide*"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="build-module-jar">
+        <jar jarfile="${build.staging.out.dir}/calculation-${build.module.name}-${build.version}.jar">
+            <fileset dir="${build.staging.compile.dir}"/>
+        </jar>
+    </target>
+
+    <target name="build-application">
+        <echo>Build application '${build.application.module.name}' to '${build.application.path}'</echo>
+
+        <intellijDeps projectRootDir="."
+                      moduleName="${build.application.module.name}"
+                      moduleDependencyParam="build.module.dependencies"/>
+        <for list="${build.module.dependencies}" param="dependency.module">
+            <sequential>
+                <echo>Get application module '@{dependency.module}' to '${build.application.path}'</echo>
+                <copy todir="${build.application.dir}/${build.application.path}/lib">
+                    <fileset dir="${build.staging.dir}/@{dependency.module}/out"/>
+                    <fileset dir="${build.staging.dir}/@{dependency.module}/lib-third-party"/>
+                </copy>
+                <copy todir="${build.application.dir}/${build.application.path}">
+                    <fileset dir="${build.staging.dir}/@{dependency.module}/config"/>
+                </copy>
+            </sequential>
+        </for>
+
+        <!-- TODO 		<antcall target="build-application-obfuscate"/> -->
+
+        <echo>Finished building application ${build.application.module.name}</echo>
+    </target>
+
+
+    <target name="clean-all" description="Clean All">
+        <echo>Clean All</echo>
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="clean-staging">
+        <echo>Clean Staging Area</echo>
+        <delete dir="${build.staging.dir}"/>
+    </target>
+
+
+</project>

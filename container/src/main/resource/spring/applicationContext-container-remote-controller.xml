@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       default-autowire="byType"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+    <bean id="remote.socket.forcontroller.factory"
+          class="com.concurrentperformance.pebble.comms.client.ClientSocketFactory"
+          p:serverHost="${pebble.controller.host}"
+          p:serverPort="${pebble.controller.port}"/>
+
+    <bean name="remote.connection.forcontroller"
+          class="com.concurrentperformance.pebble.comms.rpc.connection.impl.DefaultRpcConnection"
+          init-method="start"
+          p:weAreA="${pebble.container.name}"
+          p:weAreAId="${pebble.container.id}"
+          p:weAreConnectingTo="(Controller)"
+          p:socket-ref="remote.socket.forcontroller.factory">
+    </bean>
+
+    <bean id="container.service.spawnedComponentControl"
+          class="com.concurrentperformance.pebble.comms.rpc.client.RpcClientDuplexServiceFactory">
+        <property name="serviceOutgoingC2SAPI"
+                  value="com.concurrentperformance.pebble.controllerspawned.api.SpawnedComponentControlServiceC2SApi"/>
+        <property name="serviceOutgoingC2S"
+                  value="com.concurrentperformance.pebble.spawnedcommon.controller.SpawnedComponentControlServiceC2S"/>
+        <property name="serviceIncommingS2CAPI"
+                  value="com.concurrentperformance.pebble.controllerspawned.api.SpawnedComponentControlServiceS2CApi"/>
+        <property name="serviceIncommingS2C"
+                  value="com.concurrentperformance.pebble.spawnedcommon.controller.SpawnedComponentControlServiceS2C"/>
+        <property name="connection" ref="remote.connection.forcontroller"/>
+    </bean>
+
+    <bean id="container.service.monitorEvents"
+          class="com.concurrentperformance.pebble.comms.rpc.client.RpcClientDuplexServiceFactory">
+        <property name="serviceOutgoingC2SAPI"
+                  value="com.concurrentperformance.pebble.controllercontainer.api.monitorevent.ContainerMonitorEventServiceC2SApi"/>
+        <property name="serviceOutgoingC2S"
+                  value="com.concurrentperformance.pebble.container.controller.ContainerMonitorEventServiceC2S"/>
+        <property name="serviceIncommingS2CAPI"
+                  value="com.concurrentperformance.pebble.controllercontainer.api.monitorevent.ContainerMonitorEventServiceS2CApi"/>
+        <property name="serviceIncommingS2C"
+                  value="com.concurrentperformance.pebble.container.controller.ContainerMonitorEventServiceS2C"/>
+        <property name="connection" ref="remote.connection.forcontroller"/>
+    </bean>
+
+    <bean id="container.service.graph"
+          class="com.concurrentperformance.pebble.comms.rpc.client.RpcClientDuplexServiceFactory">
+        <property name="serviceOutgoingC2SAPI"
+                  value="com.concurrentperformance.pebble.controllercontainer.api.graph.ContainerGraphServiceC2SApi"/>
+        <property name="serviceOutgoingC2S"
+                  value="com.concurrentperformance.pebble.container.controller.ContainerGraphServiceC2S"/>
+        <property name="serviceIncommingS2CAPI"
+                  value="com.concurrentperformance.pebble.controllercontainer.api.graph.ContainerGraphServiceS2CApi"/>
+        <property name="serviceIncommingS2C"
+                  value="com.concurrentperformance.pebble.container.controller.ContainerGraphServiceS2C"/>
+        <property name="connection" ref="remote.connection.forcontroller"/>
+    </bean>
+
+</beans>

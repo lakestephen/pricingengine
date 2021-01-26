@@ -1,0 +1,4 @@
+**This document is to recored short term code ideas for the code base - not functional requirements**
+
+
+Need to have the client-api not spring dependent - instead have a  single builder class for the front end (that could be spring configed from the client API). 

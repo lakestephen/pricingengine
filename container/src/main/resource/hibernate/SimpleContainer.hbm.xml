@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="com.concurrentperformance.pebble.container.functional.graph.beans.SimpleMountItem"
+           table="TOPOLOGY_MOUNT">
+        <id name="id" type="long" column="TOPOLOGY_ID"/>
+
+        <property name="hostContainerId" column="HOST_CONTAINER_ID"/>
+    </class>
+
+
+</hibernate-mapping>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       default-autowire="byType"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <import resource="applicationContext-container-service.xml"/>
+    <import resource="applicationContext-container-remote-controller.xml"/>
+    <import resource="applicationContext-container-hibernate.xml"/>
+    <import resource="applicationContext-container-remote-hub.xml"/>
+
+    <!-- We get our properties from the command line -D options -->
+    <context:property-placeholder
+            system-properties-mode="OVERRIDE"
+            ignore-resource-not-found="true"/>
+
+    <bean class="com.concurrentperformance.pebble.spawnedcommon.SpawnedComponentLifecycle" init-method="start">
+        <property name="spawnedComponentType" value="CONTAINER"/>
+        <property name="spawnedComponentId" value="${pebble.container.id}"/>
+        <property name="spawnedComponentInstanceId" value="${pebble.container.instance}"/>
+        <property name="spawnedComponentName" value="${pebble.container.name}"/>
+    </bean>
+
+    <bean id="container" class="com.concurrentperformance.pebble.container.application.Container"
+          p:hubConnectService-ref="remote.socket.forhub.factory"/>
+
+    <bean id="service.connectionStopping"
+          class="com.concurrentperformance.pebble.container.application.ConnectionStoppingApplicationTerminator"
+          p:hubConnection-ref="remote.connection.forhub"/>
+
+    <bean id="service.shutdown" class="com.concurrentperformance.pebble.util.shutdown.impl.DefaultTerminatorService"/>
+
+</beans>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="IvyIDEA" name="IvyIDEA">
+      <configuration ivyFile="$MODULE_DIR$/ivy.xml" useProjectSettings="true" useCustomIvySettings="true" ivySettingsFile="" onlyResolveSelectedConfigs="false">
+        <propertiesSettings>
+          <propertiesFiles includeProjectLevelPropertiesFiles="true" />
+        </propertiesSettings>
+      </configuration>
+    </facet>
+    <facet type="Spring" name="Spring">
+      <configuration>
+        <fileset id="fileset1" name="Xml Application Context" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resource/spring/applicationContext-controller-remote-client.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resource/spring/applicationContext-controller-hibernate.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resource/spring/applicationContext-controller-remote-hub.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resource/spring/applicationContext-controller-remote-container.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resource/spring/applicationContext-controller-service-topology.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resource/spring/applicationContext-controller-remote-spawner.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resource/spring/applicationContext-controller.xml</file>
+        </fileset>
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/src/main">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resource" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/config" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/src/test">
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resource" isTestSource="true" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib-unmanaged/postgresql-9.1-901.jdbc4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module" module-name="controller-container-api" />
+    <orderEntry type="module" module-name="util-common" />
+    <orderEntry type="module" module-name="msg-common" />
+    <orderEntry type="module" module-name="comms" />
+    <orderEntry type="module" module-name="controller-spawned-api" />
+    <orderEntry type="module" module-name="controller-client-api" />
+    <orderEntry type="module" module-name="spawner-controller-api" />
+    <orderEntry type="module-library">
+      <library name="IvyIDEA">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/log4j/log4j/jars/log4j-1.2.16.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/commons-logging/commons-logging/jars/commons-logging-1.1.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/org.springframework/spring-context/jars/spring-context-3.1.1.RELEASE.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/org.springframework/spring-beans/jars/spring-beans-3.1.1.RELEASE.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/org.springframework/spring-core/jars/spring-core-3.1.1.RELEASE.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/org.springframework/spring-aop/jars/spring-aop-3.1.1.RELEASE.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/org.springframework/spring-asm/jars/spring-asm-3.1.1.RELEASE.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/org.springframework/spring-expression/jars/spring-expression-3.1.1.RELEASE.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/aopalliance/aopalliance/jars/aopalliance-1.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/org.aspectj/aspectjweaver/jars/aspectjweaver-1.6.12.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/org.springframework/spring-orm/jars/spring-orm-3.1.1.RELEASE.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/org.springframework/spring-jdbc/jars/spring-jdbc-3.1.1.RELEASE.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/org.springframework/spring-tx/jars/spring-tx-3.1.1.RELEASE.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/org.hibernate/hibernate/jars/hibernate-3.2.7.ga.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/commons-dbcp/commons-dbcp/jars/commons-dbcp-1.4.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/commons-pool/commons-pool/jars/commons-pool-1.5.6.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/commons-collections/commons-collections/jars/commons-collections-3.2.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/javax.transaction/jta/jars/jta-1.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/dom4j/dom4j/jars/dom4j-1.6.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/antlr/antlr/jars/antlr-2.7.6.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../ivy/cache/cglib/cglib-nodep/jars/cglib-nodep-2.1_3.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+  </component>
+</module>
+
